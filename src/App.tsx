@@ -1,5 +1,4 @@
 import React from 'react';
-
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
@@ -19,7 +18,6 @@ function App() {
           </Routes>
         </MovieProvider>
       </AuthProvider>
-
     </BrowserRouter>
 
   );
