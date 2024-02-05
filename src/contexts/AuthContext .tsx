@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext } from 'react';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 interface AuthContextProps {
   isLoggedIn: boolean;
@@ -8,15 +9,15 @@ interface AuthContextProps {
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
-export const AuthProvider: React.FC<{children: React.ReactNode}> = ({ children }: any) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }: any) => {
+  const [isLoggedIn, setIsLoggedIn] = useLocalStorage<boolean>('isLoggedIn', false);
 
   // Simple implementation just to know that the user is logged in
-  // Add to the storage
   const login = () => {
     setIsLoggedIn(true);
   };
 
+  // Set login status to false
   const logout = () => {
     setIsLoggedIn(false);
   };

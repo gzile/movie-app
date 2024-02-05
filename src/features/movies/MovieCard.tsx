@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 export const MovieCard = styled.div`
@@ -7,7 +6,7 @@ export const MovieCard = styled.div`
   border: 1px solid #ddd;
   border-radius: 8px;
   width: 200px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 
   img {
     width: 100%;
