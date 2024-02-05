@@ -7,6 +7,7 @@ import Login from './features/login/Login';
 import { AuthProvider } from './contexts/AuthContext ';
 import { MovieProvider } from './contexts/MovieContext';
 import NavBar from './features/navBar/NavigationBar';
+import MovieDetails from './features/movies/MovieDetails';
 
 function App() {
   return (
@@ -15,7 +16,8 @@ function App() {
         <MovieProvider>
         <NavBar />
           <Routes>
-            <Route path='/' element={<MovieList />} />
+            <Route path='/movies' index element={<MovieList />} />
+            <Route path="/movies/:id" element={<MovieDetails/>} />
             <Route path='/login' element={<Login />} />
           </Routes>
         </MovieProvider>

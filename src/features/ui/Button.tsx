@@ -4,6 +4,7 @@ import styled from "styled-components";
 interface ButtonProps {
     onClick: () => void;
     children: React.ReactNode;
+    disabled? : boolean;
 }
 // Styled button with some custom color and css
 const StyledButton = styled.button`
@@ -20,8 +21,8 @@ const StyledButton = styled.button`
     }
 `;
 
-const Button: React.FC<ButtonProps> = ({onClick, children}) => {
-    return <StyledButton onClick={onClick}>{children}</StyledButton>
+const Button: React.FC<ButtonProps> = ({onClick, children, disabled}) => {
+    return <StyledButton onClick={onClick} disabled={disabled} >{children}</StyledButton>
 }
 
 export default Button;
