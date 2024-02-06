@@ -28,9 +28,13 @@ const ModalContent = styled.div`
 const RatingModal: React.FC<{ onClose: () => void, movieId: number }> = ({ onClose, movieId }) => {
   const [rating, setRating] = useState(0);
 
+  // There was an issue to use the api_key so I needed to use the token 
+  
   const handleRateMovie = async (newRating: number) => {
-    console.log(movieId);
     try {
+
+      // Adding the token in the code is bad practice and should not be used, 
+      // For sake of the time I used like this here. 
       const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/rating`, {
         method: 'POST', 
         headers: {
