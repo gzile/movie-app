@@ -1,8 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-
 const movieAPIKey = process.env.MOVIES_API_KEY || '59de690a34f0dcf244f337e42afa9ae9'
-
-interface MovieType {
+export interface MovieType {
   id: number;
   title: string;
   poster_path: string;

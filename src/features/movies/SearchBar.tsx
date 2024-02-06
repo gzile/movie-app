@@ -1,34 +1,7 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import { SearchBarContainer, SearchInput, SearchButton } from '../ui/StyledComponents';
 
-const SearchContainer = styled.div`
-  margin-bottom: 20px;
-
-  input {
-    padding: 8px;
-    width: 200px;
-    margin-right: 10px;
-  }
-
-  button {
-    padding: 8px 12px;
-    cursor: pointer;
-    background-color: #0038d2;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-
-    &:hover {
-      background-color: #01114a;
-    }
-  }
-`;
-
-interface SearchBarProps {
-  onSearch: (term: string) => void;
-}
-
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
+export const SearchBar: React.FC<{ onSearch: (term: string) => void }> = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearch = () => {
@@ -36,16 +9,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   };
 
   return (
-    <SearchContainer>
-      <input
+    <SearchBarContainer>
+      <SearchInput
         type="text"
         placeholder="Search movies..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <button onClick={handleSearch}>Search</button>
-    </SearchContainer>
+      <SearchButton onClick={handleSearch}>Search</SearchButton>
+    </SearchBarContainer>
   );
 };
-
-export default SearchBar;

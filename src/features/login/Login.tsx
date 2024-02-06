@@ -3,12 +3,9 @@ import Button from '../ui/Button';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { useAuthContext } from '../../contexts/AuthContext ';
 import { useNavigate } from 'react-router-dom';
-import { Label } from '../ui/Label';
-import { Input } from '../ui/Input';
-import { Container } from '../ui/Container';
-import { CustomForm } from '../ui/Form';
+import { CustomForm, Input, Label, MovieContainer } from '../ui/StyledComponents';
 
-const Login: React.FC = () => {
+export const Login: React.FC = () => {
   const { login } = useAuthContext();
   const [username, setUsername] = useLocalStorage('username', '');
   const [password, setPassword] = useLocalStorage('password', '');
@@ -25,7 +22,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <Container>
+    <MovieContainer>
       <CustomForm>
         <Label htmlFor="username">Username:</Label>
         <Input
@@ -44,8 +41,6 @@ const Login: React.FC = () => {
 
         <Button onClick={handleLogin}>Login</Button>
       </CustomForm>
-    </Container>
+    </MovieContainer>
   );
 };
-
-export default Login;

@@ -16,9 +16,15 @@ const StyledButton = styled.button`
     border-radius: 4px;
     transitionL background-color 0.3s ease;
     border: none;
+    
     &:hover {
         background-color: #0056b3;
     }
+    
+    &:disabled {
+        background-color: #c4c6d1;
+        cursor: not-allowed;
+      }
 `;
 
 const Button: React.FC<ButtonProps> = ({onClick, children, disabled}) => {

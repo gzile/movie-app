@@ -1,74 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import { useAuthContext } from '../../contexts/AuthContext ';
+import {
+  Container,
+  DetailsContainer,
+  MovieImage,
+  MovieTitle,
+  Popularity,
+  ReleaseDate,
+} from '../ui/StyledComponents';
+import Button from '../ui/Button';
+import RatingModal from './modals/RatingModal';
+import { MovieType } from '../../contexts/MovieContext';
 
-const DetailsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  background-color: #f2f2f2;
-  border-radius: 10px;
-`;
 
-const MovieImage = styled.img`
-  max-width: 100%;
-  border-radius: 8px;
-  margin-bottom: 20px;
-`;
-
-const MovieTitle = styled.h2`
-  color: #0038d2;
-  font-size: 24px;
-  margin-bottom: 10px;
-`;
-
-const ReleaseDate = styled.p`
-  color: #01114a;
-  margin-bottom: 10px;
-`;
-
-const Popularity = styled.p`
-  color: #9e9d9d;
-  margin-bottom: 20px;
-`;
-
-const RatingContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-const RatingLabel = styled.span`
-  color: #01114a;
-  margin-right: 10px;
-`;
-
-const RatingInput = styled.input`
-  width: 40px;
-  padding: 5px;
-  font-size: 16px;
-  border: 1px solid #01114a;
-  border-radius: 5px;
-`;
-
-const FavoriteButton = styled.button`
-  background-color: #0038d2;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-`;
-
-const MovieDetails: React.FC = () => {
+export const MovieDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { isLoggedIn } = useAuthContext();
   const [movieDetails, setMovieDetails] = useState<any>({});
-  const [rating, setRating] = useState<number>(0);
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -83,43 +34,53 @@ const MovieDetails: React.FC = () => {
     };
 
     fetchMovieDetails();
+
+    const favoriteMovies = JSON.parse(localStorage.getItem('favoriteMovies') || '[]');
+    // Check if the current movie ID is in the list and set the flag
+    const found = favoriteMovies.some((movie: any) => movie.id == id);
+    setIsFavorite(found);
   }, [id]);
 
-    // Update movie rating  -  call the api
-  const handleRateMovie = (newRating: number) => {
-   
-    setRating(newRating);
-  };
-  // Call the API to add to favorite 
   const handleToggleFavorite = () => {
-    setIsFavorite((prevFavorite) => !prevFavorite);
+      setIsFavorite((prevFavorite) => !prevFavorite);
+      // Add movie to favorite list in local storage
+      const favoriteMovies = JSON.parse(localStorage.getItem('favoriteMovies') || '[]');
+      
+      const found = favoriteMovies.some((movie: MovieType) => String(movie.id) === id);
+      console.log(found);
+      if(!found){
+        localStorage.setItem('favoriteMovies', JSON.stringify([...favoriteMovies, movieDetails]));
+      }
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
     <DetailsContainer>
-      <MovieImage src={`https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`} alt="Movie Poster" />
+      <MovieImage src={`https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`} alt={movieDetails.title} />
       <MovieTitle>{movieDetails.title}</MovieTitle>
       <ReleaseDate>Release Date: {movieDetails.release_date}</ReleaseDate>
       <Popularity>Popularity: {movieDetails.popularity}</Popularity>
-
-      <RatingContainer>
-        <RatingLabel>Rate this movie:</RatingLabel>
-        <RatingInput
-          type="number"
-          min="1"
-          max="10"
-          value={rating}
-          onChange={(e) => handleRateMovie(Number(e.target.value))}
-        />
-      </RatingContainer>
+      <Container>
+      {isLoggedIn && (
+        <Button onClick={openModal}> Add Rating
+        </Button>
+      )}
+        {isModalOpen && <RatingModal onClose={closeModal} movieId={movieDetails.id} />}
+      </Container>
 
       {isLoggedIn && (
-        <FavoriteButton onClick={handleToggleFavorite}>
+        <Button onClick={handleToggleFavorite}>
           {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
-        </FavoriteButton>
+        </Button>
       )}
     </DetailsContainer>
   );
 };
 
-export default MovieDetails;

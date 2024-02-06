@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { useMovieContext } from '../../contexts/MovieContext';
 import { MovieCard } from './MovieCard';
-import { MovieListContainer } from './MovieListContainer';
-import SearchBar from './SearchBar';
-import PaginationContainer from './PaginationContainer';
+import { SearchBar } from './SearchBar';
 import Button from '../ui/Button';
 import StyledLink from '../ui/StyledLink';
+import { MovieListContainer, PaginationContainer } from '../ui/StyledComponents';
 
-const MovieList: React.FC = () => {
+export const MovieList: React.FC = () => {
   const { movies, setCurrentPage, currentPage, fetchMovies } = useMovieContext();
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -25,7 +24,7 @@ const MovieList: React.FC = () => {
 
   return (
     <div>
-      <SearchBar onSearch={(term) => handleSearch(term)} />
+      <SearchBar onSearch={(term: string) => handleSearch(term)} />
       <MovieListContainer>
         {movies?.map((movie: any) => (
           <StyledLink key={movie.id} to={`/movies/${movie.id}`} >
@@ -46,11 +45,8 @@ const MovieList: React.FC = () => {
         <span>Page {currentPage}</span>
         <Button onClick={() => handlePageChange(currentPage + 1)}>Next</Button>
       </PaginationContainer>
-
     </div>
 
 
   );
 };
-
-export default MovieList;

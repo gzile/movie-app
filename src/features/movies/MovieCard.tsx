@@ -13,4 +13,18 @@ export const MovieCard = styled.div`
     height: auto;
     border-radius: 4px;
   }
+
+  h3 {
+    color: #000;
+  }
+  
+  h3:hover {
+    color: #01b4e4;
+  }
+
+  p {
+    color: #000000;
+    opacity: 0.6;
+  }
+
 `;
