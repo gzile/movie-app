@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { CloseButton, ModalBtnContainer, RatingLabel, Star, StarContainer } from '../../ui/StyledComponents';
+import config from '../../../config/config';
 
 const modalRoot = document.getElementById('root');
 
@@ -28,24 +29,20 @@ const ModalContent = styled.div`
 const RatingModal: React.FC<{ onClose: () => void, movieId: number }> = ({ onClose, movieId }) => {
   const [rating, setRating] = useState(0);
 
-  // There was an issue to use the api_key so I needed to use the token 
-  
   const handleRateMovie = async (newRating: number) => {
     try {
 
-      // Adding the token in the code is bad practice and should not be used, 
-      // For sake of the time I used like this here. 
       const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/rating`, {
         method: 'POST', 
         headers: {
           accept: 'application/json',
           'Content-Type': 'application/json;charset=utf-8',
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1OWRlNjkwYTM0ZjBkY2YyNDRmMzM3ZTQyYWZhOWFlOSIsInN1YiI6IjY1YmY1NGQxYmE0ODAyMDE2MTZhODM0NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LHww5lBJAhloovX0x96XUM9Q-7jAipSEujZ8Gw7w4qk'
+          Authorization: `Bearer ${config.movieAPIToken}`
         },
         body: JSON.stringify({value: newRating})
       });
   
-      console.log('Rating added successfully:', response.json);
+      console.info('Rating added successfully:', response.json);
       setRating(newRating);
     } catch (error) {
       console.error('Error adding rating:', error);

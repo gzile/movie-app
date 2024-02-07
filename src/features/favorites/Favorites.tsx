@@ -1,11 +1,10 @@
 import React from 'react';
 import { MovieCard } from '../movies/MovieCard';
 import { MovieListContainer } from '../ui/StyledComponents';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
 export const Favorites: React.FC = () => {
-  const favoriteMovies = JSON.parse(localStorage.getItem('favoriteMovies') || '[]');
-
-  console.log(favoriteMovies);
+  const [favoriteMovies] = useLocalStorage('favoriteMovies', [])
 
   return (
     <div>

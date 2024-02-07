@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-const movieAPIKey = process.env.MOVIES_API_KEY || '59de690a34f0dcf244f337e42afa9ae9'
+import config  from '../config/config';
 export interface MovieType {
   id: number;
   title: string;
@@ -25,16 +25,15 @@ export const MovieProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
 
-
   const fetchMovies = async (page: number, searchText?: string) => {
     try {
       // Change the url based on the search context/ text since is different url
       let url = '';
 
       if (searchText) {
-        url = `https://api.themoviedb.org/3/search/movie?page=${page}&api_key=${movieAPIKey}&query=${searchText}`;
+        url = `https://api.themoviedb.org/3/search/movie?page=${page}&api_key=${config.movieAPIKey}&query=${searchText}`;
       } else {
-        url = `https://api.themoviedb.org/3/movie/popular?page=${page}&api_key=${movieAPIKey}`;
+        url = `https://api.themoviedb.org/3/movie/popular?page=${page}&api_key=${config.movieAPIKey}`;
       }
 
       const response = await fetch(url);

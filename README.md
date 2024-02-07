@@ -2,6 +2,11 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Add .env file 
+There is a `.env.example` file add your values to them to run the app
+    REACT_APP_MOVIE_API_KEY=
+    REACT_APP_MOVIE_API_TOKEN=
+ 
 ## Available Scripts
 
 In the project directory, you can run:

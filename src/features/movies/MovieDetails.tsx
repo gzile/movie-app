@@ -12,7 +12,8 @@ import {
 import Button from '../ui/Button';
 import RatingModal from './modals/RatingModal';
 import { MovieType } from '../../contexts/MovieContext';
-
+import useLocalStorage from '../../hooks/useLocalStorage';
+import config from '../../config/config';
 
 export const MovieDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,11 +22,12 @@ export const MovieDetails: React.FC = () => {
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [favoriteMovies, setFavoriteMovies] = useLocalStorage<MovieType[]>('favoriteMovies', []); // Use useLocalStorage hook
+
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
-        const apiKey = '59de690a34f0dcf244f337e42afa9ae9';
-        const response = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}`);
+        const response = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${config.movieAPIKey}`);
         const data = await response.json();
         setMovieDetails(data);
       } catch (error) {
@@ -35,22 +37,20 @@ export const MovieDetails: React.FC = () => {
 
     fetchMovieDetails();
 
-    const favoriteMovies = JSON.parse(localStorage.getItem('favoriteMovies') || '[]');
     // Check if the current movie ID is in the list and set the flag
-    const found = favoriteMovies.some((movie: any) => movie.id == id);
+    const found = favoriteMovies.some((movie: MovieType) => String(movie.id) === id);
     setIsFavorite(found);
-  }, [id]);
+  }, [id, favoriteMovies]);
 
   const handleToggleFavorite = () => {
-      setIsFavorite((prevFavorite) => !prevFavorite);
-      // Add movie to favorite list in local storage
-      const favoriteMovies = JSON.parse(localStorage.getItem('favoriteMovies') || '[]');
-      
-      const found = favoriteMovies.some((movie: MovieType) => String(movie.id) === id);
-      console.log(found);
-      if(!found){
-        localStorage.setItem('favoriteMovies', JSON.stringify([...favoriteMovies, movieDetails]));
-      }
+    setIsFavorite((prevFavorite) => !prevFavorite);
+    //Add or remove the movie from the favorite list
+    if (!isFavorite) {
+      setFavoriteMovies([...favoriteMovies, movieDetails]);
+    } else {
+      const updatedFavorites = favoriteMovies.filter((movie: MovieType) => String(movie.id) !== id);
+      setFavoriteMovies(updatedFavorites);
+    }
   };
 
   const openModal = () => {
@@ -68,10 +68,9 @@ export const MovieDetails: React.FC = () => {
       <ReleaseDate>Release Date: {movieDetails.release_date}</ReleaseDate>
       <Popularity>Popularity: {movieDetails.popularity}</Popularity>
       <Container>
-      {isLoggedIn && (
-        <Button onClick={openModal}> Add Rating
-        </Button>
-      )}
+        {isLoggedIn && (
+          <Button onClick={openModal}> Add Rating </Button>
+        )}
         {isModalOpen && <RatingModal onClose={closeModal} movieId={movieDetails.id} />}
       </Container>
 
@@ -83,4 +82,3 @@ export const MovieDetails: React.FC = () => {
     </DetailsContainer>
   );
 };
-
